@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#W#",
+    " L ",
+    " / "
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:stone"
+    },
+    "W": {
+      "item": "minecraft:stone_shovel"
+    },
+    "L": {
+      "item": "minecraft:stone_pickaxe"
+    },
+    "/": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "simple_hammers:stone_hammer",
+    "count": 1
+  }
+}

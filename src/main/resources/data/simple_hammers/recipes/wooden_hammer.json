@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#W#",
+    " L ",
+    " / "
+  ],
+  "key": {
+    "#": {
+      "tag": "minecraft:planks"
+    },
+    "W": {
+      "item": "minecraft:wooden_shovel"
+    },
+    "L": {
+      "item": "minecraft:wooden_pickaxe"
+    },
+    "/": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "simple_hammers:wooden_hammer",
+    "count": 1
+  }
+}
