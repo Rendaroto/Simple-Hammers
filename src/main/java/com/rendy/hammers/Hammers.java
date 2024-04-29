@@ -34,12 +34,13 @@ public class Hammers
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
-        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES)
+        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(Hammer.WOODEN_HAMMER);
             event.accept(Hammer.STONE_HAMMER);
             event.accept(Hammer.GOLDEN_HAMMER);
             event.accept(Hammer.IRON_HAMMER);
             event.accept(Hammer.DIAMOND_HAMMER);
             event.accept(Hammer.NETHERITE_HAMMER);
+        }
     }
 }

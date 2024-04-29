@@ -1,10 +1,10 @@
 {
-  "type": "minecraft:smithing_trim",
+  "type": "minecraft:smithing_transform",
   "template": {
     "item": "minecraft:netherite_upgrade_smithing_template"
   },
   "base": {
-    "item": "rendys:diamond_hammer"
+    "item": "simple_hammers:diamond_hammer"
   },
   "addition": {
     "item": "minecraft:netherite_ingot"
