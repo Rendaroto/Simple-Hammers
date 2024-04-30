@@ -16,6 +16,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -92,7 +93,7 @@ public class HammerEvents {
         // Compute product values
         float product = yawSin * pitchCos;
         float product2 = yawCos * pitchCos;
-        double reachDistance = player.getBlockReach();
+        double reachDistance = 4.5;
 
         Vec3 vec3 = player.getEyePosition(1.0F);
         // Update coordinates of vec3 instead of creating a new Vec3 instance
