@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class HammerItem extends PickaxeItem {
         HammerItem(Tier pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties) {
-            super(pTier, pAttackDamageModifier, pAttackSpeedModifier, pProperties);
+            super(pTier, pProperties.attributes((createAttributes(pTier, pAttackDamageModifier, pAttackDamageModifier))));
         }
 
         @Override

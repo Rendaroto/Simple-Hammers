@@ -1,14 +1,12 @@
 package com.rendy.hammers;
 
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.item.PickaxeItem;
-import net.neoforged.fml.common.Mod;
-
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -17,13 +15,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class HammerEvents {
 
     @SubscribeEvent
@@ -38,6 +38,7 @@ public class HammerEvents {
                 final Level level = event.getPlayer().getCommandSenderWorld();
                 final double hardness = event.getState().getDestroySpeed(level, event.getPos());
                 final boolean notCreativeMode = !event.getPlayer().isCreative();
+
                 if(!event.getPlayer().isShiftKeyDown()) {
                     for (BlockPos pos : getAffectedPos(event.getPlayer())) {
                         final BlockState state = level.getBlockState(pos);
@@ -92,6 +93,7 @@ public class HammerEvents {
         float product = yawSin * pitchCos;
         float product2 = yawCos * pitchCos;
         double reachDistance = player.getBlockReach();
+
         Vec3 vec3 = player.getEyePosition(1.0F);
         // Update coordinates of vec3 instead of creating a new Vec3 instance
         vec3 = vec3.add(product * reachDistance, pitchSin * reachDistance, product2 * reachDistance);
