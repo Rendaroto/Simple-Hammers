@@ -20,7 +20,7 @@
     }
   },
   "result": {
-    "item": "simple_hammers:golden_hammer",
+    "id": "simple_hammers:golden_hammer",
     "count": 1
   }
 }

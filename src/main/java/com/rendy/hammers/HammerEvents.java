@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
@@ -20,7 +21,6 @@ import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +33,10 @@ public class HammerEvents {
         if (event.getState().canOcclude())
         {
             final ItemStack item = event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND);
-            if (item.getItem() instanceof HammerItem)
+            int i = 0;
+            if (item.getItem() instanceof HammerItem && item.getItem().getDamage(item)+1 < item.getMaxDamage())
             {
+                EquipmentSlot equipmentSlot = item.getEquipmentSlot(); assert equipmentSlot != null;
                 final ItemStack mainHand = event.getPlayer().getMainHandItem();
                 final Level level = event.getPlayer().getCommandSenderWorld();
                 final double hardness = event.getState().getDestroySpeed(level, event.getPos());
@@ -43,13 +45,16 @@ public class HammerEvents {
                 if(!event.getPlayer().isShiftKeyDown()) {
                     for (BlockPos pos : getAffectedPos(event.getPlayer())) {
                         final BlockState state = level.getBlockState(pos);
-                        if (hardness * 2 >= state.getDestroySpeed(level, pos) && isBestTool(state, level, pos, item, event.getPlayer()) && state.getDestroySpeed(level, pos) >= 0f) {
+                        if (hardness * 2 >= state.getDestroySpeed(level, pos) && isBestTool(state, level, pos, item, event.getPlayer()) && state.getDestroySpeed(level, pos) >= 0f && item.getItem().getDamage(item)+1 < item.getMaxDamage()) {
                             if(notCreativeMode){
                                 state.getBlock().playerDestroy(level, event.getPlayer(), pos, state, level.getBlockEntity(pos), mainHand);
+                                i+=1;
                             }
                             level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
                         }
                     }
+                    item.hurtAndBreak(i, event.getPlayer(), equipmentSlot);
+                    item.hurtAndBreak(-1,event.getPlayer(), equipmentSlot);
                 }
                 else{
 
@@ -93,11 +98,10 @@ public class HammerEvents {
         // Compute product values
         float product = yawSin * pitchCos;
         float product2 = yawCos * pitchCos;
-        double reachDistance = 4.5;
 
         Vec3 vec3 = player.getEyePosition(1.0F);
         // Update coordinates of vec3 instead of creating a new Vec3 instance
-        vec3 = vec3.add(product * reachDistance, pitchSin * reachDistance, product2 * reachDistance);
+        vec3 = vec3.add(product * 4.5, pitchSin * 4.5, product2 * 4.5);
 
         return level.clip(new ClipContext(player.getEyePosition(1.0F), vec3, ClipContext.Block.OUTLINE, mode, player));
     }

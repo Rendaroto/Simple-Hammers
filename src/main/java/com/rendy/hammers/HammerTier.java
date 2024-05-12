@@ -5,6 +5,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 
@@ -12,12 +13,13 @@ import java.util.function.Supplier;
 
 
 public enum HammerTier implements Tier {
-    STONE_HAMMER(BlockTags.INCORRECT_FOR_STONE_TOOL, 131, 5f, 1f, 5, () -> Ingredient.of(ItemTags.STONE_TOOL_MATERIALS)),
-    IRON_HAMMER(BlockTags.INCORRECT_FOR_IRON_TOOL, 250, 7f, 2f, 14, () -> Ingredient.of(Items.IRON_INGOT)),
-    DIAMOND_HAMMER(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1561, 9f, 3f, 10, () -> Ingredient.of(Items.DIAMOND)),
-    GOLD_HAMMER(BlockTags.INCORRECT_FOR_STONE_TOOL, 160, 13f, 0f, 22, () -> Ingredient.of(Items.GOLD_INGOT)),
-    NETHERITE_HAMMER(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 2031, 10f, 4f, 15, () -> Ingredient.of(Items.NETHERITE_INGOT)),
-    WOODEN_HAMMER(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 59, 3f, 0.8f, 3, () -> Ingredient.of(ItemTags.PLANKS));
+    WOODEN_HAMMER(BlockTags.INCORRECT_FOR_WOODEN_TOOL, Tiers.WOOD.getUses()*9, Tiers.WOOD.getSpeed(), 0.8f, 15, () -> Ingredient.of(ItemTags.PLANKS)),
+    STONE_HAMMER(BlockTags.INCORRECT_FOR_STONE_TOOL, Tiers.STONE.getUses()*9, Tiers.STONE.getSpeed(), 1f, 5,() -> Ingredient.of(ItemTags.STONE_TOOL_MATERIALS)),
+    GOLD_HAMMER(BlockTags.INCORRECT_FOR_STONE_TOOL, Tiers.GOLD.getUses()*9, Tiers.GOLD.getSpeed(), 0f, 22, () -> Ingredient.of(Items.GOLD_INGOT)),
+    IRON_HAMMER(BlockTags.INCORRECT_FOR_IRON_TOOL, Tiers.IRON.getUses()*9, Tiers.IRON.getSpeed(), 2f, 14, () -> Ingredient.of(Items.IRON_INGOT)),
+    DIAMOND_HAMMER(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, Tiers.DIAMOND.getUses()*9, Tiers.DIAMOND.getSpeed(), 3f, 10, () -> Ingredient.of(Items.DIAMOND)),
+    NETHERITE_HAMMER(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, Tiers.NETHERITE.getUses()*9, Tiers.NETHERITE.getSpeed(), 4f, 15, () -> Ingredient.of(Items.NETHERITE_INGOT));
+
 
 
     private final TagKey<Block> incorrect;
