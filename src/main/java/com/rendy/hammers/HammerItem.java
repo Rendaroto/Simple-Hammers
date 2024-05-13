@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class HammerItem extends PickaxeItem {
         HammerItem(Tier pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties) {
-            super(pTier, pProperties.attributes((createAttributes(pTier, pAttackDamageModifier, pAttackDamageModifier))));
+            super(pTier, pProperties.attributes((createAttributes(pTier, pAttackDamageModifier, pAttackSpeedModifier))));
         }
 
         @Override
@@ -22,6 +22,7 @@ public class HammerItem extends PickaxeItem {
             return true;
         }
 
+        //The Hammer is both a Pickaxe and a Shovel
         @Override
         public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ToolAction toolAction) {
             return ToolActions.DEFAULT_PICKAXE_ACTIONS.contains(toolAction) || ToolActions.DEFAULT_SHOVEL_ACTIONS.contains(toolAction);
