@@ -34,7 +34,7 @@ public class HammerEvents {
             final ItemStack item = event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND);
             int i = 0; //Iterator
 
-            //I check if it's an hammer and i have at least 1 usage
+            //I check if it's a hammer and I have at least 1 usage
             if (item.getItem() instanceof HammerItem && item.getItem().getDamage(item)+1 < item.getMaxDamage())
             {
                 EquipmentSlot equipmentSlot = item.getEquipmentSlot(); assert equipmentSlot != null; //IntelliJ wants this
@@ -53,10 +53,9 @@ public class HammerEvents {
                         /*
                         *
                         * I check that
-                        * I can break the block
-                        * The block is not too hard compared to the one i actually broke
+                        * I can break the block, and it is not too hard compared to the one I actually broke
                         * I check that the block is breakable
-                        * I check if i can actually break it with my usage
+                        * I check if I can actually break it with my usage
                         *
                          */
                         if (hardness * 2 >= state.getDestroySpeed(level, pos) && isBestTool(state, level, pos, item, event.getPlayer()) && state.getDestroySpeed(level, pos) >= 0f && item.getItem().getDamage(item)+1 < item.getMaxDamage()) {
@@ -74,13 +73,13 @@ public class HammerEvents {
         }
     }
 
-    //Also google, but i know that i know, what, i don't know but i'm sure that i know that i check if the block is right for drop
+    //Also google, but I know that I know, what, I don't know but i'm sure that I know that I check if the block is right for drop
     private static boolean isBestTool(final BlockState target, final LevelAccessor level, final BlockPos pos, final ItemStack stack, final Player player)
     {
         return stack.isCorrectToolForDrops(target);
     }
 
-    //I calculate what i'm seeing to get the blocks around, iguess i copied from google xD
+    //I calculate what I'm seeing to get the blocks around, I guess I copied from google xD
     public static BlockHitResult rayTrace(final Level level, final Player player, final ClipContext.Fluid mode) {
         float pitch = player.getXRot();
         float yaw = player.getYRot();
