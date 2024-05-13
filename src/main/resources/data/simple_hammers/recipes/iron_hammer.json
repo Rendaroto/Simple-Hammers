@@ -20,7 +20,7 @@
     }
   },
   "result": {
-    "item": "simple_hammers:iron_hammer",
+    "id": "simple_hammers:iron_hammer",
     "count": 1
   }
 }

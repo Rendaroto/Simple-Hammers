@@ -1,12 +1,11 @@
 package com.rendy.hammers;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -16,11 +15,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,58 +27,60 @@ public class HammerEvents {
     @SubscribeEvent
     public static void onBlockBreak(@NotNull final BlockEvent.BreakEvent event)
     {
+        //IDK
         if (event.getState().canOcclude())
         {
+            //I check if the item in my hand is a Hammer
             final ItemStack item = event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND);
-            if (item.getItem() instanceof HammerItem)
+            int i = 0; //Iterator
+
+            //I check if it's an hammer and i have at least 1 usage
+            if (item.getItem() instanceof HammerItem && item.getItem().getDamage(item)+1 < item.getMaxDamage())
             {
+                EquipmentSlot equipmentSlot = item.getEquipmentSlot(); assert equipmentSlot != null; //IntelliJ wants this
                 final ItemStack mainHand = event.getPlayer().getMainHandItem();
+
+                //I get the block
                 final Level level = event.getPlayer().getCommandSenderWorld();
                 final double hardness = event.getState().getDestroySpeed(level, event.getPos());
+
+                // just to get that Vanilla touch when breaking in creative
                 final boolean notCreativeMode = !event.getPlayer().isCreative();
 
                 if(!event.getPlayer().isShiftKeyDown()) {
-                    for (BlockPos pos : getAffectedPos(event.getPlayer())) {
+                    for (BlockPos pos : getAffectedPos(event.getPlayer())) { //I get all the block to break
                         final BlockState state = level.getBlockState(pos);
-                        if (hardness * 2 >= state.getDestroySpeed(level, pos) && isBestTool(state, level, pos, item, event.getPlayer()) && state.getDestroySpeed(level, pos) >= 0f) {
+                        /*
+                        *
+                        * I check that
+                        * I can break the block
+                        * The block is not too hard compared to the one i actually broke
+                        * I check that the block is breakable
+                        * I check if i can actually break it with my usage
+                        *
+                         */
+                        if (hardness * 2 >= state.getDestroySpeed(level, pos) && isBestTool(state, level, pos, item, event.getPlayer()) && state.getDestroySpeed(level, pos) >= 0f && item.getItem().getDamage(item)+1 < item.getMaxDamage()) {
                             if(notCreativeMode){
-                                state.getBlock().playerDestroy(level, event.getPlayer(), pos, state, level.getBlockEntity(pos), mainHand);
+                                state.getBlock().playerDestroy(level, event.getPlayer(), pos, state, level.getBlockEntity(pos), mainHand); //set the action to the block
+                                i+=1; //This makes sense later
                             }
-                            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState()); //I destroy it
                         }
                     }
-                }
-                else{
-
-                    final BlockHitResult rayTrace = rayTrace(event.getPlayer().level(), event.getPlayer(), ClipContext.Fluid.NONE);
-                    final BlockPos center = rayTrace.getBlockPos();
-
-                    final BlockState state = level.getBlockState(center);
-
-                    if ((hardness * 2 >= state.getDestroySpeed(level, center) && isBestTool(state, level, center, item, event.getPlayer()) && state.getDestroySpeed(level, center) >= 0f) && notCreativeMode) {
-                        level.setBlockAndUpdate(center, Blocks.AIR.defaultBlockState());
-                        if(notCreativeMode){
-                            state.getBlock().playerDestroy(level, event.getPlayer(), center, state, level.getBlockEntity(center), mainHand);
-                        }
-                        level.setBlockAndUpdate(center, Blocks.AIR.defaultBlockState());
-
-                    }
+                    item.hurtAndBreak(i, event.getPlayer(), equipmentSlot); //remove the usage
+                    item.hurtAndBreak(-1,event.getPlayer(), equipmentSlot); //even if it's zero the vanilla shrink later should do the trick
                 }
             }
         }
     }
 
+    //Also google, but i know that i know, what, i don't know but i'm sure that i know that i check if the block is right for drop
     private static boolean isBestTool(final BlockState target, final LevelAccessor level, final BlockPos pos, final ItemStack stack, final Player player)
     {
-
-        if (stack.getItem() instanceof PickaxeItem && (stack.isCorrectToolForDrops(target) || target.getTags().toList().contains(BlockTags.MINEABLE_WITH_SHOVEL)))
-        {
-            return true;
-        }
-
         return stack.isCorrectToolForDrops(target);
     }
 
+    //I calculate what i'm seeing to get the blocks around, iguess i copied from google xD
     public static BlockHitResult rayTrace(final Level level, final Player player, final ClipContext.Fluid mode) {
         float pitch = player.getXRot();
         float yaw = player.getYRot();
@@ -93,11 +92,10 @@ public class HammerEvents {
         // Compute product values
         float product = yawSin * pitchCos;
         float product2 = yawCos * pitchCos;
-        double reachDistance = 4.5;
 
         Vec3 vec3 = player.getEyePosition(1.0F);
         // Update coordinates of vec3 instead of creating a new Vec3 instance
-        vec3 = vec3.add(product * reachDistance, pitchSin * reachDistance, product2 * reachDistance);
+        vec3 = vec3.add(product * 4.5, pitchSin * 4.5, product2 * 4.5);
 
         return level.clip(new ClipContext(player.getEyePosition(1.0F), vec3, ClipContext.Block.OUTLINE, mode, player));
     }

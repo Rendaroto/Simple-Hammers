@@ -10,6 +10,7 @@
     "item": "minecraft:netherite_ingot"
   },
   "result": {
-    "item": "simple_hammers:netherite_hammer"
+    "count": 1,
+    "id": "simple_hammers:netherite_hammer"
   }
 }

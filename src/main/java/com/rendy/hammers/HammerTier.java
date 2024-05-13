@@ -1,23 +1,29 @@
 package com.rendy.hammers;
 
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
 
 public enum HammerTier implements Tier {
-    STONE_HAMMER(BlockTags.INCORRECT_FOR_STONE_TOOL, 131, 5f, 1f, 5, () -> Ingredient.of(ItemTags.STONE_TOOL_MATERIALS)),
-    IRON_HAMMER(BlockTags.INCORRECT_FOR_IRON_TOOL, 250, 7f, 2f, 14, () -> Ingredient.of(Items.IRON_INGOT)),
-    DIAMOND_HAMMER(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1561, 9f, 3f, 10, () -> Ingredient.of(Items.DIAMOND)),
-    GOLD_HAMMER(BlockTags.INCORRECT_FOR_STONE_TOOL, 160, 13f, 0f, 22, () -> Ingredient.of(Items.GOLD_INGOT)),
-    NETHERITE_HAMMER(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 2031, 10f, 4f, 15, () -> Ingredient.of(Items.NETHERITE_INGOT)),
-    WOODEN_HAMMER(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 59, 3f, 0.8f, 3, () -> Ingredient.of(ItemTags.PLANKS));
+    /*
+    *
+    * All the tier for this mod are the same as vanilla but the uses are 9 times as i have to break 9 blocks at the time
+    *
+     */
+    WOODEN_HAMMER(BlockTags.INCORRECT_FOR_WOODEN_TOOL, Tiers.WOOD.getUses()*9, Tiers.WOOD.getSpeed(), Tiers.WOOD.getAttackDamageBonus(), Tiers.WOOD.getEnchantmentValue(), Tiers.WOOD::getRepairIngredient),
+    STONE_HAMMER(BlockTags.INCORRECT_FOR_STONE_TOOL, Tiers.STONE.getUses()*9, Tiers.STONE.getSpeed(), Tiers.STONE.getAttackDamageBonus(), Tiers.STONE.getEnchantmentValue(), Tiers.STONE::getRepairIngredient),
+    GOLD_HAMMER(BlockTags.INCORRECT_FOR_STONE_TOOL, Tiers.GOLD.getUses()*9, Tiers.GOLD.getSpeed(), Tiers.GOLD.getAttackDamageBonus(), Tiers.IRON.getEnchantmentValue(), Tiers.GOLD::getRepairIngredient),
+    IRON_HAMMER(BlockTags.INCORRECT_FOR_IRON_TOOL, Tiers.IRON.getUses()*9, Tiers.IRON.getSpeed(), Tiers.IRON.getAttackDamageBonus(), Tiers.GOLD.getEnchantmentValue(), Tiers.IRON::getRepairIngredient),
+    DIAMOND_HAMMER(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, Tiers.DIAMOND.getUses()*9, Tiers.DIAMOND.getSpeed(), Tiers.DIAMOND.getAttackDamageBonus(), Tiers.DIAMOND.getEnchantmentValue(), Tiers.DIAMOND::getRepairIngredient),
+    NETHERITE_HAMMER(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, Tiers.NETHERITE.getUses()*9, Tiers.NETHERITE.getSpeed(), Tiers.NETHERITE.getAttackDamageBonus(), Tiers.NETHERITE.getEnchantmentValue(), Tiers.NETHERITE::getRepairIngredient);
+
 
 
     private final TagKey<Block> incorrect;
@@ -48,7 +54,7 @@ public enum HammerTier implements Tier {
         return this.damage;
     }
 
-    public TagKey<Block> getIncorrectBlocksForDrops() {
+    public @NotNull TagKey<Block> getIncorrectBlocksForDrops() {
         return this.incorrect;
     }
 
@@ -56,7 +62,7 @@ public enum HammerTier implements Tier {
         return this.enchantmentValue;
     }
 
-    public Ingredient getRepairIngredient() {
+    public @NotNull Ingredient getRepairIngredient() {
         return this.ingredient.get();
     }
 }
