@@ -1,11 +1,13 @@
 package com.rendy.hammers;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -76,6 +78,10 @@ public class HammerEvents {
     //Also google, but I know that I know, what, I don't know but i'm sure that I know that I check if the block is right for drop
     private static boolean isBestTool(final BlockState target, final LevelAccessor level, final BlockPos pos, final ItemStack stack, final Player player)
     {
+        if (stack.getItem() instanceof HammerItem && (stack.isCorrectToolForDrops(target) || target.getTags().toList().contains(BlockTags.MINEABLE_WITH_SHOVEL)))
+        {
+            return true;
+        }
         return stack.isCorrectToolForDrops(target);
     }
 
