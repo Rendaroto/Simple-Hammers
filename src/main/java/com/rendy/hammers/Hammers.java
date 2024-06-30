@@ -1,10 +1,9 @@
 package com.rendy.hammers;
 
-import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.client.gui.screens.inventory.CreativeInventoryListener;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-//import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -24,26 +23,11 @@ public class Hammers
 
         MinecraftForge.EVENT_BUS.register(this);
         Hammer.HAMMER_ITEMS.register(modEventBus);
-        modEventBus.addListener(this::addCreative);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         // Some common setup code
-    }
-
-    //Add the example block item to the building blocks tab
-    private void addCreative(CreativeModeTabEvent.BuildContents event)
-    {
-        //Adding the items to the existing Creative Tab
-        if (event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-            event.accept(Hammer.WOODEN_HAMMER);
-            event.accept(Hammer.STONE_HAMMER);
-            event.accept(Hammer.GOLDEN_HAMMER);
-            event.accept(Hammer.IRON_HAMMER);
-            event.accept(Hammer.DIAMOND_HAMMER);
-            event.accept(Hammer.NETHERITE_HAMMER);
-        }
     }
 
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)

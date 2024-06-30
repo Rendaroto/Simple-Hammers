@@ -1,5 +1,6 @@
 package com.rendy.hammers;
 
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.Tiers;
@@ -15,21 +16,21 @@ public class Hammer {
     //Passing to the register name, supplier () -> (Tier, attackModifier, attackSpeed, properties)
     public static final RegistryObject<HammerItem> WOODEN_HAMMER = HAMMER_ITEMS.register  ("wooden_hammer",
             () -> new HammerItem(Tiers.WOOD,1,-2.8f,
-                    new Item.Properties()));
+                    new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
     public static final RegistryObject<HammerItem> STONE_HAMMER = HAMMER_ITEMS.register  ("stone_hammer",
             () -> new HammerItem(Tiers.STONE,1,-2.8f,
-                    new Item.Properties()));
+                    new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
     public static final RegistryObject<HammerItem> GOLDEN_HAMMER = HAMMER_ITEMS.register  ("golden_hammer",
             () -> new HammerItem(Tiers.GOLD,1,-2.8f,
-                    new Item.Properties()));
+                    new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
     public static final RegistryObject<HammerItem> IRON_HAMMER = HAMMER_ITEMS.register  ("iron_hammer",
             () -> new HammerItem(Tiers.IRON,1,-2.8f,
-                    new Item.Properties()));
+                    new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
     public static final RegistryObject<HammerItem> DIAMOND_HAMMER = HAMMER_ITEMS.register  ("diamond_hammer",
             () -> new HammerItem(Tiers.DIAMOND,1,-2.8f,
-                    new Item.Properties()));
+                    new Item.Properties().tab(CreativeModeTab.TAB_TOOLS)));
     public static final RegistryObject<HammerItem> NETHERITE_HAMMER = HAMMER_ITEMS.register  ("netherite_hammer",
             () -> new HammerItem(Tiers.NETHERITE,1,-2.8f,
-                    new Item.Properties().fireResistant().rarity(Rarity.EPIC)));
+                    new Item.Properties().tab(CreativeModeTab.TAB_TOOLS).fireResistant().rarity(Rarity.EPIC)));
 
 }
