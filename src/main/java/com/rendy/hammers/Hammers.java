@@ -3,7 +3,8 @@ package com.rendy.hammers;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+//import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -31,11 +32,11 @@ public class Hammers
         // Some common setup code
     }
 
-    // Add the example block item to the building blocks tab
-    private void addCreative(BuildCreativeModeTabContentsEvent event)
+    //Add the example block item to the building blocks tab
+    private void addCreative(CreativeModeTabEvent.BuildContents event)
     {
         //Adding the items to the existing Creative Tab
-        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+        if (event.getTab() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(Hammer.WOODEN_HAMMER);
             event.accept(Hammer.STONE_HAMMER);
             event.accept(Hammer.GOLDEN_HAMMER);

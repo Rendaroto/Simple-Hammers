@@ -111,7 +111,7 @@ public class HammerEvents {
     public static List<BlockPos> getAffectedPos(@NotNull final Player player)
     {
         final List<BlockPos> list = new ArrayList<>();
-        final BlockHitResult rayTrace = rayTrace(player.level(), player, ClipContext.Fluid.NONE);
+        final BlockHitResult rayTrace = rayTrace(player.level, player, ClipContext.Fluid.NONE);
 
         final BlockPos center = rayTrace.getBlockPos();
         list.add(center);
