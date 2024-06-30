@@ -20,7 +20,6 @@
     }
   },
   "result": {
-    "id": "simple_hammers:wooden_hammer",
-    "count": 1
+    "item": "simple_hammers:wooden_hammer"
   }
 }
