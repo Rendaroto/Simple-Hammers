@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#W#",
+    " L ",
+    " / "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_block"
+    },
+    "W": {
+      "item": "minecraft:iron_shovel"
+    },
+    "L": {
+      "item": "minecraft:iron_pickaxe"
+    },
+    "/": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "id": "simple_hammers:iron_hammer",
+    "count": 1
+  }
+}

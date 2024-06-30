@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#W#",
+    " L ",
+    " / "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:diamond_block"
+    },
+    "W": {
+      "item": "minecraft:diamond_shovel"
+    },
+    "L": {
+      "item": "minecraft:diamond_pickaxe"
+    },
+    "/": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "id": "simple_hammers:diamond_hammer",
+    "count": 1
+  }
+}

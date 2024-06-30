@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#W#",
+    " L ",
+    " / "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:gold_block"
+    },
+    "W": {
+      "item": "minecraft:golden_shovel"
+    },
+    "L": {
+      "item": "minecraft:golden_pickaxe"
+    },
+    "/": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "id": "simple_hammers:golden_hammer",
+    "count": 1
+  }
+}
