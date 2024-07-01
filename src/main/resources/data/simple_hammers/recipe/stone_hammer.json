@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     "#W#",
     " L ",
@@ -7,20 +8,20 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:diamond_block"
+      "tag": "forge:stone"
     },
     "W": {
-      "item": "minecraft:diamond_shovel"
+      "item": "minecraft:stone_shovel"
     },
     "L": {
-      "item": "minecraft:diamond_pickaxe"
+      "item": "minecraft:stone_pickaxe"
     },
     "/": {
       "item": "minecraft:stick"
     }
   },
   "result": {
-    "id": "simple_hammers:diamond_hammer",
+    "id": "simple_hammers:stone_hammer",
     "count": 1
   }
 }

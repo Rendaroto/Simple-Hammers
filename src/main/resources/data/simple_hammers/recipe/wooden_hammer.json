@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     "#W#",
     " L ",
@@ -7,20 +8,20 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:gold_block"
+      "tag": "minecraft:planks"
     },
     "W": {
-      "item": "minecraft:golden_shovel"
+      "item": "minecraft:wooden_shovel"
     },
     "L": {
-      "item": "minecraft:golden_pickaxe"
+      "item": "minecraft:wooden_pickaxe"
     },
     "/": {
       "item": "minecraft:stick"
     }
   },
   "result": {
-    "id": "simple_hammers:golden_hammer",
+    "id": "simple_hammers:wooden_hammer",
     "count": 1
   }
 }
