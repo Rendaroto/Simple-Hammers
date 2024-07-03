@@ -8,7 +8,7 @@
   ],
   "key": {
     "#": {
-      "tag": "forge:stone"
+      "tag": "c:cobblestones"
     },
     "W": {
       "item": "minecraft:stone_shovel"
