@@ -60,7 +60,7 @@ public class HammerEvents {
                         * I check if I can actually break it with my usage
                         *
                          */
-                        if (hardness * 2 >= state.getDestroySpeed(level, pos) && isBestTool(state, level, pos, item, event.getPlayer()) && state.getDestroySpeed(level, pos) >= 0f && item.getItem().getDamage(item)+1 < item.getMaxDamage()) {
+                        if (hardness * 2 >= state.getDestroySpeed(level, pos) && isBestTool(state, level, pos, item, event.getPlayer()) && state.getDestroySpeed(level, pos) >= 0f && item.getItem().getDamage(item)+i < item.getMaxDamage()) {
                             if(notCreativeMode){
                                 state.getBlock().playerDestroy(level, event.getPlayer(), pos, state, level.getBlockEntity(pos), mainHand); //set the action to the block
                                 i+=1; //This makes sense later
