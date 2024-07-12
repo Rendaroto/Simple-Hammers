@@ -1,23 +1,20 @@
 package com.rendy.hammers;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,45 +23,28 @@ import java.util.List;
 public class HammerEvents {
 
     @SubscribeEvent
-    public static void onBlockBreak(@NotNull final BlockEvent.BreakEvent event)
-    {
-        //IDK
-        if (event.getState().canOcclude())
-        {
-            //I check if the item in my hand is a Hammer
-            final ItemStack item = event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND);
-            int i = 0; //Iterator
+    public static void onBlockBreak(final BlockEvent.BreakEvent event) {
+        if (event.getState().canOcclude()) {
+            PlayerEntity player = event.getPlayer();
+            ItemStack item = player.getItemInHand(Hand.MAIN_HAND);
 
-            //I check if it's a hammer and I have at least 1 usage
-            if (item.getItem() instanceof HammerItem && item.getItem().getDamage(item)+1 < item.getMaxDamage())
-            {
-                EquipmentSlot equipmentSlot = item.getEquipmentSlot(); assert equipmentSlot != null; //IntelliJ wants this
-                final ItemStack mainHand = event.getPlayer().getMainHandItem();
+            if (item.getItem() instanceof HammerItem && item.getDamageValue() + 1 < item.getMaxDamage()) {
+                World world = player.level;
+                double hardness = event.getState().getDestroySpeed(world, event.getPos());
+                boolean notCreativeMode = !player.isCreative();
 
-                //I get the block
-                final Level level = event.getPlayer().getCommandSenderWorld();
-                final double hardness = event.getState().getDestroySpeed(level, event.getPos());
+                if (!player.isShiftKeyDown()) {
+                    for (BlockPos pos : getAffectedPos(player)) {
+                        BlockState state = world.getBlockState(pos);
 
-                // just to get that Vanilla touch when breaking in creative
-                final boolean notCreativeMode = !event.getPlayer().isCreative();
-
-                if(!event.getPlayer().isShiftKeyDown()) {
-                    for (BlockPos pos : getAffectedPos(event.getPlayer())) { //I get all the block to break
-                        final BlockState state = level.getBlockState(pos);
-                        /*
-                         *
-                         * I check that
-                         * I can break the block, and it is not too hard compared to the one I actually broke
-                         * I check that the block is breakable
-                         * I check if I can actually break it with my usage
-                         *
-                         */
-                        if (hardness * 2 >= state.getDestroySpeed(level, pos) && isBestTool(state, level, pos, item, event.getPlayer()) && state.getDestroySpeed(level, pos) >= 0f && item.getItem().getDamage(item)+1 < item.getMaxDamage()) {
-                            if(notCreativeMode){
-                                state.getBlock().playerDestroy(level, event.getPlayer(), pos, state, level.getBlockEntity(pos), mainHand); //set the action to the block
-                                i+=1; //This makes sense later
+                        if (hardness * 2 >= state.getDestroySpeed(world, pos)
+                                && isBestTool(state, world, pos, item, player)
+                                && state.getDestroySpeed(world, pos) >= 0f
+                                && item.getDamageValue() + 1 < item.getMaxDamage()) {
+                            if (notCreativeMode) {
+                                state.getBlock().destroy(world, pos, state);
                             }
-                            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState()); //I destroy it
+                            world.setBlock(pos, Blocks.AIR.getBlock().defaultBlockState(), 3);
                         }
                     }
                 }
@@ -72,51 +52,37 @@ public class HammerEvents {
         }
     }
 
-    //Also google, but I know that I know, what, I don't know but i'm sure that I know that I check if the block is right for drop
-    private static boolean isBestTool(final BlockState target, final LevelAccessor level, final BlockPos pos, final ItemStack stack, final Player player)
-    {
-        if (stack.getItem() instanceof HammerItem && (stack.isCorrectToolForDrops(target) || target.getTags().toList().contains(BlockTags.MINEABLE_WITH_SHOVEL)))
-        {
-            return true;
-        }
-        return stack.isCorrectToolForDrops(target);
+    private static boolean isBestTool(BlockState target, World world, BlockPos pos, ItemStack stack, PlayerEntity player) {
+        return stack.getItem() instanceof HammerItem  && (stack.getToolTypes().contains(ToolType.PICKAXE) || target.getHarvestTool() == ToolType.SHOVEL);
     }
 
-    //I calculate what I'm seeing to get the blocks around, I guess I copied from google xD
-    public static BlockHitResult rayTrace(final Level level, final Player player, final ClipContext.Fluid mode) {
-        float pitch = player.getXRot();
-        float yaw = player.getYRot();
-        // Precalculate trigonometric values
-        float yawCos = Mth.cos(-yaw * 0.017453292F - (float) Math.PI);
-        float yawSin = Mth.sin(-yaw * 0.017453292F - (float) Math.PI);
-        float pitchCos = -Mth.cos(-pitch * 0.017453292F);
-        float pitchSin = Mth.sin(-pitch * 0.017453292F);
-        // Compute product values
-        float product = yawSin * pitchCos;
-        float product2 = yawCos * pitchCos;
+    public static BlockRayTraceResult rayTrace(World world, PlayerEntity player, RayTraceContext.FluidMode mode) {
+        float pitch = player.xRot;
+        float yaw = player.yRot;
 
-        Vec3 vec3 = player.getEyePosition(1.0F);
-        // Update coordinates of vec3 instead of creating a new Vec3 instance
-        vec3 = vec3.add(product * 4.5, pitchSin * 4.5, product2 * 4.5);
+        // Calculate the direction vector based on yaw and pitch
+        float pitchCos = MathHelper.cos(-pitch * ((float)Math.PI / 180F));
+        float pitchSin = MathHelper.sin(-pitch * ((float)Math.PI / 180F));
+        float yawCos = MathHelper.cos(-yaw * ((float)Math.PI / 180F));
+        float yawSin = MathHelper.sin(-yaw * ((float)Math.PI / 180F));
 
-        return level.clip(new ClipContext(player.getEyePosition(1.0F), vec3, ClipContext.Block.OUTLINE, mode, player));
+        Vector3d direction = new Vector3d((double)(yawSin * pitchCos), (double)pitchSin, (double)(yawCos * pitchCos));
+        Vector3d startVec = player.getEyePosition(1.0F);
+        Vector3d endVec = startVec.add(direction.scale(4.5));  // 4.5 is the distance of the ray trace
+
+        // Perform the ray trace
+        RayTraceContext context = new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.OUTLINE, mode, player);
+        return world.clip(context);
     }
 
-    /**
-     * Get all affected pos for a player with a tool.
-     *
-     * @param player the player.
-     * @return the list of affected positions.
-     */
-    public static List<BlockPos> getAffectedPos(@NotNull final Player player)
-    {
-        final List<BlockPos> list = new ArrayList<>();
-        final BlockHitResult rayTrace = rayTrace(player.level, player, ClipContext.Fluid.NONE);
+    public static List<BlockPos> getAffectedPos(PlayerEntity player) {
+        List<BlockPos> list = new ArrayList<>();
+        BlockRayTraceResult rayTrace = rayTrace(player.level, player, net.minecraft.util.math.RayTraceContext.FluidMode.NONE);
 
-        final BlockPos center = rayTrace.getBlockPos();
-        list.add(center);
+        BlockPos center = rayTrace.getBlockPos();
         switch (rayTrace.getDirection()) {
-            case DOWN, UP -> {
+            case DOWN:
+            case UP:
                 list.add(center.west());
                 list.add(center.east());
                 list.add(center.north());
@@ -125,8 +91,9 @@ public class HammerEvents {
                 list.add(center.west().south());
                 list.add(center.east().north());
                 list.add(center.east().south());
-            }
-            case NORTH, SOUTH -> {
+                break;
+            case NORTH:
+            case SOUTH:
                 list.add(center.above());
                 list.add(center.below());
                 list.add(center.west());
@@ -135,8 +102,9 @@ public class HammerEvents {
                 list.add(center.west().below());
                 list.add(center.east().above());
                 list.add(center.east().below());
-            }
-            case EAST, WEST -> {
+                break;
+            case EAST:
+            case WEST:
                 list.add(center.above());
                 list.add(center.below());
                 list.add(center.north());
@@ -145,7 +113,7 @@ public class HammerEvents {
                 list.add(center.north().below());
                 list.add(center.south().above());
                 list.add(center.south().below());
-            }
+                break;
         }
 
         return list;

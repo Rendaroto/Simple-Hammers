@@ -1,30 +1,30 @@
 package com.rendy.hammers;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.Tier;
-import net.minecraftforge.common.ToolAction;
-import net.minecraftforge.common.ToolActions;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.IItemTier;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.PickaxeItem;
+import net.minecraftforge.common.ToolType;
 
 public class HammerItem extends PickaxeItem {
-    HammerItem(Tier pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties) {
-        super(pTier, pAttackDamageModifier, pAttackSpeedModifier, pProperties);
+    HammerItem(IItemTier tier, int attackDamageModifier, float attackSpeedModifier, Properties properties) {
+        super(tier, attackDamageModifier, attackSpeedModifier, properties.addToolType(ToolType.PICKAXE, tier.getLevel())
+                .addToolType(ToolType.SHOVEL, tier.getLevel()));
     }
 
     @Override
-    public boolean isEnchantable(@NotNull ItemStack pStack) {
+    public boolean isEnchantable(ItemStack stack) {
         return true;
     }
 
     @Override
-    public boolean isRepairable(@NotNull ItemStack stack) {
+    public boolean isRepairable(ItemStack stack) {
         return true;
     }
 
-    //The Hammer is both a Pickaxe and a Shovel
+    // The Hammer is both a Pickaxe and a Shovel
     @Override
-    public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ToolAction toolAction) {
-        return ToolActions.DEFAULT_PICKAXE_ACTIONS.contains(toolAction) || ToolActions.DEFAULT_SHOVEL_ACTIONS.contains(toolAction);
+    public boolean isCorrectToolForDrops(BlockState p_150897_1_) {
+        return (p_150897_1_.getHarvestTool() == ToolType.PICKAXE || p_150897_1_.getHarvestTool() == ToolType.SHOVEL) && this.getTier().getLevel() >= p_150897_1_.getHarvestLevel();
     }
 }
