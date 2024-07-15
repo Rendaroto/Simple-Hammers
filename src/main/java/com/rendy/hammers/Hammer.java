@@ -1,32 +1,23 @@
 package com.rendy.hammers;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.*;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.item.Item.ToolMaterial;
+import net.minecraftforge.event.RegistryEvent;
+
+import java.rmi.registry.Registry;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.rendy.hammers.Hammers.MOD_ID;
 
 public class Hammer {
 
-    // Creating the HAMMER_ITEMS for registering all the HAMMERS
-    public static final DeferredRegister<Item> HAMMER_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Hammers.MOD_ID);
+    public static final List<Item> HAMMERS = new ArrayList<Item>();
 
-    // Registering hammers with tier, attack damage, attack speed, and properties
-    public static final RegistryObject<HammerItem> WOODEN_HAMMER = HAMMER_ITEMS.register("wooden_hammer",
-            () -> new HammerItem(ItemTier.WOOD, 1, -2.8f,
-                    new Item.Properties().tab(ItemGroup.TAB_TOOLS)));
-    public static final RegistryObject<HammerItem> STONE_HAMMER = HAMMER_ITEMS.register("stone_hammer",
-            () -> new HammerItem(ItemTier.STONE, 1, -2.8f,
-                    new Item.Properties().tab(ItemGroup.TAB_TOOLS)));
-    public static final RegistryObject<HammerItem> GOLDEN_HAMMER = HAMMER_ITEMS.register("golden_hammer",
-            () -> new HammerItem(ItemTier.GOLD, 1, -2.8f,
-                    new Item.Properties().tab(ItemGroup.TAB_TOOLS)));
-    public static final RegistryObject<HammerItem> IRON_HAMMER = HAMMER_ITEMS.register("iron_hammer",
-            () -> new HammerItem(ItemTier.IRON, 1, -2.8f,
-                    new Item.Properties().tab(ItemGroup.TAB_TOOLS)));
-    public static final RegistryObject<HammerItem> DIAMOND_HAMMER = HAMMER_ITEMS.register("diamond_hammer",
-            () -> new HammerItem(ItemTier.DIAMOND, 1, -2.8f,
-                    new Item.Properties().tab(ItemGroup.TAB_TOOLS)));
-    public static final RegistryObject<HammerItem> NETHERITE_HAMMER = HAMMER_ITEMS.register("netherite_hammer",
-            () -> new HammerItem(ItemTier.NETHERITE, 1, -2.8f,
-                    new Item.Properties().fireResistant().rarity(Rarity.EPIC).tab(ItemGroup.TAB_TOOLS)));
+    public static final Item WOODEN_HAMMER = new HammerItem(ToolMaterial.WOOD, 1, -2.8f, "wooden_hammer");
+    public static final Item STONE_HAMMER = new HammerItem(ToolMaterial.STONE, 1, -2.8f,"stone_hammer");
+    public static final Item GOLDEN_HAMMER = new HammerItem(ToolMaterial.GOLD, 1, -2.8f,"golden_hammer");
+    public static final Item IRON_HAMMER = new HammerItem(ToolMaterial.IRON, 1, -2.8f,"iron_hammer");
+    public static final Item DIAMOND_HAMMER = new HammerItem(ToolMaterial.DIAMOND, 1, -2.8f,"diamond_hammer");
 }

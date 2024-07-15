@@ -1,38 +1,23 @@
 package com.rendy.hammers;
 
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-// The value here should match an entry in the META-INF/mods.toml file
-@Mod(Hammers.MOD_ID)
-public class Hammers
-{
+@Mod(modid = Hammers.MOD_ID, name = Hammers.NAME, version = Hammers.VERSION)
+public class Hammers {
     public static final String MOD_ID = "simple_hammers";
+    public static final String NAME = "Simple Hammers";
+    public static final String VERSION = "0.0.1-BACKPORT";
 
-    public Hammers()
-    {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    @Mod.Instance
+    public static Hammers instance;
 
-        MinecraftForge.EVENT_BUS.register(this);
-        Hammer.HAMMER_ITEMS.register(modEventBus);
-    }
+    @SidedProxy(clientSide = "com.rendy.hammers.ClientProxy", serverSide = "com.rendy.hammers.CommonProxy")
+    public static CommonProxy proxy;
 
-    private void commonSetup(final FMLCommonSetupEvent event)
-    {
-        // Some common setup code
-    }
-
-    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-
-        }
+    @Mod.EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
     }
 }

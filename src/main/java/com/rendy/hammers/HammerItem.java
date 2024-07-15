@@ -1,15 +1,35 @@
 package com.rendy.hammers;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.item.IItemTier;
+import com.google.common.collect.Sets;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.PickaxeItem;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.item.ItemTool;
 
-public class HammerItem extends PickaxeItem {
-    HammerItem(IItemTier tier, int attackDamageModifier, float attackSpeedModifier, Properties properties) {
-        super(tier, attackDamageModifier, attackSpeedModifier, properties.addToolType(ToolType.PICKAXE, tier.getLevel())
-                .addToolType(ToolType.SHOVEL, tier.getLevel()));
+import java.util.Set;
+
+import static com.rendy.hammers.Hammers.MOD_ID;
+
+public class HammerItem extends ItemPickaxe implements  IHasModel{
+
+    private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(
+            Blocks.COBBLESTONE, Blocks.STONE, Blocks.SAND, Blocks.GRAVEL,
+            Blocks.DIRT, Blocks.GRASS, Blocks.SANDSTONE, Blocks.RED_SANDSTONE
+    );
+
+    public HammerItem(ToolMaterial material, float attackDamage, float attackSpeed,String name) {
+        super( material);
+        this.setRegistryName(MOD_ID, name);
+        this.setUnlocalizedName(MOD_ID + "." + name);
+        this.setCreativeTab(CreativeTabs.TOOLS);
+        this.setMaxStackSize(1);
+        Hammer.HAMMERS.add(this);
+
+        System.out.println(getRegistryName());
+        System.out.println(getUnlocalizedName());
     }
 
     @Override
@@ -18,13 +38,17 @@ public class HammerItem extends PickaxeItem {
     }
 
     @Override
-    public boolean isRepairable(ItemStack stack) {
-        return true;
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        return this.toolMaterial.getRepairItemStack() == repair || super.getIsRepairable(toRepair, repair);
     }
 
-    // The Hammer is both a Pickaxe and a Shovel
     @Override
-    public boolean isCorrectToolForDrops(BlockState p_150897_1_) {
-        return (p_150897_1_.getHarvestTool() == ToolType.PICKAXE || p_150897_1_.getHarvestTool() == ToolType.SHOVEL) && this.getTier().getLevel() >= p_150897_1_.getHarvestLevel();
+    public boolean canHarvestBlock(IBlockState state) {
+        return this.toolMaterial.getHarvestLevel() >= state.getBlock().getHarvestLevel(state);
+    }
+
+    @Override
+    public void registerModels() {
+        Hammers.proxy.registerItemRenderer(this,0,"inventory");
     }
 }

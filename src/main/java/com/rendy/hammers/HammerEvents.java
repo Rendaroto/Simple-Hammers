@@ -1,20 +1,18 @@
 package com.rendy.hammers;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ToolType;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,27 +22,28 @@ public class HammerEvents {
 
     @SubscribeEvent
     public static void onBlockBreak(final BlockEvent.BreakEvent event) {
-        if (event.getState().canOcclude()) {
-            PlayerEntity player = event.getPlayer();
-            ItemStack item = player.getItemInHand(Hand.MAIN_HAND);
+        IBlockState state = event.getState();
+        if (state.getBlock().isToolEffective("pickaxe", state) || state.getBlock().isToolEffective("shovel", state) ) {
+            EntityPlayer player = event.getPlayer();
+            ItemStack item = player.getHeldItemMainhand();
 
-            if (item.getItem() instanceof HammerItem && item.getDamageValue() + 1 < item.getMaxDamage()) {
-                World world = player.level;
-                double hardness = event.getState().getDestroySpeed(world, event.getPos());
-                boolean notCreativeMode = !player.isCreative();
+            if (item.getItem() instanceof HammerItem && item.getItemDamage() + 1 < item.getMaxDamage()) {
+                World world = player.world;
+                float hardness = state.getBlockHardness(world, event.getPos());
+                boolean notCreativeMode = !player.capabilities.isCreativeMode;
 
-                if (!player.isShiftKeyDown()) {
+                if (!player.isSneaking()) {
                     for (BlockPos pos : getAffectedPos(player)) {
-                        BlockState state = world.getBlockState(pos);
+                        IBlockState targetState = world.getBlockState(pos);
 
-                        if (hardness * 2 >= state.getDestroySpeed(world, pos)
-                                && isBestTool(state, world, pos, item, player)
-                                && state.getDestroySpeed(world, pos) >= 0f
-                                && item.getDamageValue() + 1 < item.getMaxDamage()) {
+                        if (hardness * 2 >= targetState.getBlockHardness(world, pos)
+                                && isBestTool(targetState, world, pos, item)
+                                && targetState.getBlockHardness(world, pos) >= 0f
+                                && item.getItemDamage() + 1 < item.getMaxDamage()) {
                             if (notCreativeMode) {
-                                state.getBlock().destroy(world, pos, state);
+                                targetState.getBlock().harvestBlock(world, player, pos, targetState, world.getTileEntity(pos), item);
                             }
-                            world.setBlock(pos, Blocks.AIR.getBlock().defaultBlockState(), 3);
+                            world.setBlockToAir(pos);
                         }
                     }
                 }
@@ -52,13 +51,14 @@ public class HammerEvents {
         }
     }
 
-    private static boolean isBestTool(BlockState target, World world, BlockPos pos, ItemStack stack, PlayerEntity player) {
-        return stack.getItem() instanceof HammerItem  && (stack.getToolTypes().contains(ToolType.PICKAXE) || target.getHarvestTool() == ToolType.SHOVEL);
+    private static boolean isBestTool(IBlockState target, World world, BlockPos pos, ItemStack stack) {
+        return stack.getItem() instanceof HammerItem
+                && (target.getBlock().isToolEffective("pickaxe", target) || target.getBlock().isToolEffective("shovel", target));
     }
 
-    public static BlockRayTraceResult rayTrace(World world, PlayerEntity player, RayTraceContext.FluidMode mode) {
-        float pitch = player.xRot;
-        float yaw = player.yRot;
+    public static RayTraceResult rayTrace(World world, EntityPlayer player) {
+        float pitch = player.rotationPitch;
+        float yaw = player.rotationYaw;
 
         // Calculate the direction vector based on yaw and pitch
         float pitchCos = MathHelper.cos(-pitch * ((float)Math.PI / 180F));
@@ -66,56 +66,71 @@ public class HammerEvents {
         float yawCos = MathHelper.cos(-yaw * ((float)Math.PI / 180F));
         float yawSin = MathHelper.sin(-yaw * ((float)Math.PI / 180F));
 
-        Vector3d direction = new Vector3d((double)(yawSin * pitchCos), (double)pitchSin, (double)(yawCos * pitchCos));
-        Vector3d startVec = player.getEyePosition(1.0F);
-        Vector3d endVec = startVec.add(direction.scale(4.5));  // 4.5 is the distance of the ray trace
+        Vec3d direction = new Vec3d((double)(yawSin * pitchCos), (double)pitchSin, (double)(yawCos * pitchCos));
+        Vec3d startVec = player.getPositionEyes(1.0F);
+        Vec3d endVec = startVec.add(direction.scale(4.5));  // 4.5 is the distance of the ray trace
 
         // Perform the ray trace
-        RayTraceContext context = new RayTraceContext(startVec, endVec, RayTraceContext.BlockMode.OUTLINE, mode, player);
-        return world.clip(context);
+        return world.rayTraceBlocks(startVec, endVec, false, true, false);
     }
 
-    public static List<BlockPos> getAffectedPos(PlayerEntity player) {
+    public static List<BlockPos> getAffectedPos(EntityPlayer player) {
         List<BlockPos> list = new ArrayList<>();
-        BlockRayTraceResult rayTrace = rayTrace(player.level, player, net.minecraft.util.math.RayTraceContext.FluidMode.NONE);
+        RayTraceResult rayTrace = rayTrace(player.world, player);
 
-        BlockPos center = rayTrace.getBlockPos();
-        switch (rayTrace.getDirection()) {
-            case DOWN:
-            case UP:
-                list.add(center.west());
-                list.add(center.east());
-                list.add(center.north());
-                list.add(center.south());
-                list.add(center.west().north());
-                list.add(center.west().south());
-                list.add(center.east().north());
-                list.add(center.east().south());
-                break;
-            case NORTH:
-            case SOUTH:
-                list.add(center.above());
-                list.add(center.below());
-                list.add(center.west());
-                list.add(center.east());
-                list.add(center.west().above());
-                list.add(center.west().below());
-                list.add(center.east().above());
-                list.add(center.east().below());
-                break;
-            case EAST:
-            case WEST:
-                list.add(center.above());
-                list.add(center.below());
-                list.add(center.north());
-                list.add(center.south());
-                list.add(center.north().above());
-                list.add(center.north().below());
-                list.add(center.south().above());
-                list.add(center.south().below());
-                break;
+        if (rayTrace != null && rayTrace.typeOfHit == RayTraceResult.Type.BLOCK) {
+            BlockPos center = rayTrace.getBlockPos();
+            switch (rayTrace.sideHit) {
+                case DOWN:
+                case UP:
+                    list.add(center.west());
+                    list.add(center.east());
+                    list.add(center.north());
+                    list.add(center.south());
+                    list.add(center.west().north());
+                    list.add(center.west().south());
+                    list.add(center.east().north());
+                    list.add(center.east().south());
+                    break;
+                case NORTH:
+                case SOUTH:
+                    list.add(center.up());
+                    list.add(center.down());
+                    list.add(center.west());
+                    list.add(center.east());
+                    list.add(center.west().up());
+                    list.add(center.west().down());
+                    list.add(center.east().up());
+                    list.add(center.east().down());
+                    break;
+                case EAST:
+                case WEST:
+                    list.add(center.up());
+                    list.add(center.down());
+                    list.add(center.north());
+                    list.add(center.south());
+                    list.add(center.north().up());
+                    list.add(center.north().down());
+                    list.add(center.south().up());
+                    list.add(center.south().down());
+                    break;
+            }
         }
 
         return list;
+    }
+
+    @SubscribeEvent
+    public static void onItemRegister(RegistryEvent.Register<Item> event){
+        event.getRegistry().registerAll(Hammer.HAMMERS.toArray(new Item[0]));
+    }
+
+    @SubscribeEvent
+    public static void onModelRegister(RegistryEvent.Register<Item> event){
+        for(Item item : Hammer.HAMMERS){
+            if(item instanceof IHasModel){
+               ((IHasModel)item).registerModels();
+            }
+        }
     }
 }
