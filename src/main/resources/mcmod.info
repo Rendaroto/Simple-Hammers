@@ -1,0 +1,17 @@
+[{
+  "modid": "simple_hammers",
+  "name": "Simple Hammers",
+  "description": "",
+  "version": "0.0.1",
+  "mcversion": "1.12.2",
+  "url": "",
+  "updateUrl": "",
+  "authorList": [
+    "Rendy"
+  ],
+  "credits": "Rendy",
+  "logoFile": "",
+  "screenshots": [],
+  "parent":"",
+  "dependencies": []
+}]
