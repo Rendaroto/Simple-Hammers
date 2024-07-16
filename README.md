@@ -1,28 +1,16 @@
+Simple Hammers: Enhance Your Mining and Construction Efficiency
 
-Installation information
-=======
+Simple Hammers introduces versatile 3x3 Pickaxe-Shovel vanilla like tools designed to revolutionize both mining and construction.
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions at [github](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+Features: 3x3 Mining Capability: Efficiently mine or dig in a 3x3 area, significantly speeding up your work.
+Dual Functionality: Easily switch between 3x3 and 1x1 modes for precise control. Simply hold the SHIFT key to break single blocks when needed.
+  Usages:
+    Efficiency Boost: Say goodbye to tedious small tunnels and hello to faster, more effective mining. Simplify large-scale excavation and construction projects, saving time and effort.
+    Versatility: Whether you're expanding your base or collecting resources, the ability to toggle between broad and focused mining modes offers unmatched flexibility and precision.
+  
+  Additional Information:
+    Compatibility: Note that backported versions are not supported. This is a straightforward port to ensure you have the latest and greatest tools at your disposal.
+ 
+Step up your game and make mining and construction more enjoyable with Simple Hammers!
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
-
-> **Note**: For Eclipse, use tasks in `Launch Group` instead of ones founds in `Java Application`. A preparation task must run before launching the game. NeoGradle uses launch groups to do these subsequently.
-
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
-
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license, if you do not agree with it you can change your mapping names to other crowdsourced names in your 
-build.gradle. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
-
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+[![Curseforge](https://legacy.curseforge.com/minecraft/mc-mods/simple-hammers)]
