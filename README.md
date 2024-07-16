@@ -13,4 +13,4 @@ Dual Functionality: Easily switch between 3x3 and 1x1 modes for precise control.
  
 Step up your game and make mining and construction more enjoyable with Simple Hammers!
 
-[![Curseforge](https://legacy.curseforge.com/minecraft/mc-mods/simple-hammers)]
+[![Curseforge](http://cf.way2muchnoise.eu/versions/For%20MC_227639_all.svg)](https://legacy.curseforge.com/minecraft/mc-mods/simple-hammers)
