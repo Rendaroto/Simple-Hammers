@@ -1,47 +1,52 @@
 package com.rendy.hammers;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = Hammers.MOD_ID)
 public class HammerEvents {
 
-    @SubscribeEvent
-    public static void onBlockBreak(final BlockEvent.BreakEvent event) {
-        IBlockState state = event.getState();
-        if (state.getBlock().isToolEffective("pickaxe", state) || state.getBlock().isToolEffective("shovel", state) ) {
-            EntityPlayer player = event.getPlayer();
-            ItemStack item = player.getHeldItemMainhand();
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onBlockBreak(final BlockEvent.BreakEvent event) {
 
-            if (item.getItem() instanceof HammerItem && item.getItemDamage() + 1 < item.getMaxDamage()) {
+        IBlockState state = event.state;
+        Block block = state.getBlock();
+
+        if (state.getBlock().isToolEffective("pickaxe", state) || state.getBlock().isToolEffective("shovel", state)) {
+
+            EntityPlayer player = event.getPlayer();
+            ItemStack item = player.inventory.getCurrentItem();
+
+            if (item != null && item.getItem() instanceof HammerItem && item.getItemDamage() + 1 < item.getMaxDamage()) {
                 World world = player.world;
-                float hardness = state.getBlockHardness(world, event.getPos());
+                float hardness = block.getBlockHardness(world, event.pos);
                 boolean notCreativeMode = !player.capabilities.isCreativeMode;
 
                 if (!player.isSneaking()) {
                     for (BlockPos pos : getAffectedPos(player)) {
                         IBlockState targetState = world.getBlockState(pos);
+                        Block targetBlock = targetState.getBlock();
 
-                        if (hardness * 2 >= targetState.getBlockHardness(world, pos)
+                        if (hardness * 2 >= targetBlock.getBlockHardness(world, pos)
                                 && isBestTool(targetState, world, pos, item)
-                                && targetState.getBlockHardness(world, pos) >= 0f
+                                && targetBlock.getBlockHardness(world, pos) >= 0f
                                 && item.getItemDamage() + 1 < item.getMaxDamage()) {
                             if (notCreativeMode) {
-                                targetState.getBlock().harvestBlock(world, player, pos, targetState, world.getTileEntity(pos), item);
+                                targetState.getBlock().harvestBlock(world, player, pos, targetState, world.getTileEntity(pos));
                             }
                             world.setBlockToAir(pos);
                         }
@@ -56,19 +61,19 @@ public class HammerEvents {
                 && (target.getBlock().isToolEffective("pickaxe", target) || target.getBlock().isToolEffective("shovel", target));
     }
 
-    public static RayTraceResult rayTrace(World world, EntityPlayer player) {
+    public static MovingObjectPosition rayTrace(World world, EntityPlayer player) {
         float pitch = player.rotationPitch;
         float yaw = player.rotationYaw;
 
         // Calculate the direction vector based on yaw and pitch
-        float pitchCos = MathHelper.cos(-pitch * ((float)Math.PI / 180F));
-        float pitchSin = MathHelper.sin(-pitch * ((float)Math.PI / 180F));
-        float yawCos = MathHelper.cos(-yaw * ((float)Math.PI / 180F));
-        float yawSin = MathHelper.sin(-yaw * ((float)Math.PI / 180F));
+        float pitchCos = MathHelper.cos(-pitch * ((float) Math.PI / 180F));
+        float pitchSin = MathHelper.sin(-pitch * ((float) Math.PI / 180F));
+        float yawCos = MathHelper.cos(-yaw * ((float) Math.PI / 180F));
+        float yawSin = MathHelper.sin(-yaw * ((float) Math.PI / 180F));
 
-        Vec3d direction = new Vec3d((double)(yawSin * pitchCos), (double)pitchSin, (double)(yawCos * pitchCos));
-        Vec3d startVec = player.getPositionEyes(1.0F);
-        Vec3d endVec = startVec.add(direction.scale(4.5));  // 4.5 is the distance of the ray trace
+        Vec3 direction = new Vec3((double) (yawSin * pitchCos), (double) pitchSin, (double) (yawCos * pitchCos));
+        Vec3 startVec = player.getPositionEyes(1.0F);
+        Vec3 endVec = startVec.addVector(direction.xCoord * 4.5, direction.yCoord * 4.5, direction.zCoord * 4.5);  // 4.5 is the distance of the ray trace
 
         // Perform the ray trace
         return world.rayTraceBlocks(startVec, endVec, false, true, false);
@@ -76,9 +81,9 @@ public class HammerEvents {
 
     public static List<BlockPos> getAffectedPos(EntityPlayer player) {
         List<BlockPos> list = new ArrayList<>();
-        RayTraceResult rayTrace = rayTrace(player.world, player);
+        MovingObjectPosition rayTrace = rayTrace(player.world, player);
 
-        if (rayTrace != null && rayTrace.typeOfHit == RayTraceResult.Type.BLOCK) {
+        if (rayTrace != null && rayTrace.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             BlockPos center = rayTrace.getBlockPos();
             switch (rayTrace.sideHit) {
                 case DOWN:
@@ -120,13 +125,14 @@ public class HammerEvents {
         return list;
     }
 
-    @SubscribeEvent
-    public static void onItemRegister(RegistryEvent.Register<Item> event){
-        event.getRegistry().registerAll(Hammer.HAMMERS.toArray(new Item[0]));
+    public static void onItemRegister(){
+        Hammer.init();
+        for (Item item : Hammer.HAMMERS) {
+            GameRegistry.registerItem(item);
+        }
     }
 
-    @SubscribeEvent
-    public static void onModelRegister(RegistryEvent.Register<Item> event){
+    public static void onModelRegister(){
         for(Item item : Hammer.HAMMERS){
             if(item instanceof IHasModel){
                ((IHasModel)item).registerModels();

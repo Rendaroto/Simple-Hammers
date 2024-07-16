@@ -3,7 +3,12 @@ package com.rendy.hammers;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+
+import static com.rendy.hammers.HammerEvents.onItemRegister;
+import static com.rendy.hammers.HammerEvents.onModelRegister;
+import static com.rendy.hammers.RecipesFunction.registerCraftingTableRecipe;
 
 @Mod(modid = Hammers.MOD_ID, name = Hammers.NAME, version = Hammers.VERSION)
 public class Hammers {
@@ -19,5 +24,7 @@ public class Hammers {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        onItemRegister(); onModelRegister(); MinecraftForge.EVENT_BUS.register(new HammerEvents());
+        registerCraftingTableRecipe();
     }
 }
