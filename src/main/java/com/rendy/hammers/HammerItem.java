@@ -3,8 +3,8 @@ package com.rendy.hammers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tier;
-import net.neoforged.neoforge.common.ToolAction;
-import net.neoforged.neoforge.common.ToolActions;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.ItemAbility;
 import org.jetbrains.annotations.NotNull;
 
 public class HammerItem extends PickaxeItem {
@@ -24,7 +24,7 @@ public class HammerItem extends PickaxeItem {
 
         //The Hammer is both a Pickaxe and a Shovel
         @Override
-        public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ToolAction toolAction) {
-            return ToolActions.DEFAULT_PICKAXE_ACTIONS.contains(toolAction) || ToolActions.DEFAULT_SHOVEL_ACTIONS.contains(toolAction);
+        public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
+            return ItemAbilities.DEFAULT_PICKAXE_ACTIONS.contains(itemAbility) || ItemAbilities.DEFAULT_SHOVEL_ACTIONS.contains(itemAbility);
         }
 }
