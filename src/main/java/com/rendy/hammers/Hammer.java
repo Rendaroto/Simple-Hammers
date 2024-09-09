@@ -1,5 +1,6 @@
 package com.rendy.hammers;
 
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import com.rendy.hammers.HammerTier;
@@ -31,5 +32,4 @@ public class Hammer {
     public static final RegistryObject<HammerItem> NETHERITE_HAMMER = HAMMER_ITEMS.register  ("netherite_hammer",
             () -> new HammerItem(HammerTier.NETHERITE_HAMMER,1,-2.8f,
                     new Item.Properties().fireResistant().rarity(Rarity.EPIC)));
-
 }
