@@ -1,12 +1,16 @@
 package com.rendy.hammers;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -62,6 +66,7 @@ public class HammerEvents {
                         if (hardness * 2 >= state.getDestroySpeed(level, pos) && isBestTool(state, level, pos, item, event.getPlayer()) && state.getDestroySpeed(level, pos) >= 0f && item.getItem().getDamage(item) + i < item.getMaxDamage()) {
                             if(notCreativeMode){
                                 state.getBlock().playerDestroy(level, event.getPlayer(), pos, state, level.getBlockEntity(pos), mainHand); //set the action to the block
+                                state.getBlock().popExperience((ServerLevel) level,pos,state.getExpDrop(level, RandomSource.create(),pos, EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE,mainHand), EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH,mainHand)));
                                 i+=1; //This makes sense later
                             }
                             level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState()); //I destroy it
@@ -103,7 +108,7 @@ public class HammerEvents {
 
         Vec3 vec3 = player.getEyePosition(1.0F);
         // Update coordinates of vec3 instead of creating a new Vec3 instance
-        vec3 = vec3.add(product * 4.5, pitchSin * 4.5, product2 * 4.5);
+        vec3 = vec3.add(product * player.getBlockReach(), pitchSin * 4.5, product2 * 4.5);
 
         return level.clip(new ClipContext(player.getEyePosition(1.0F), vec3, ClipContext.Block.OUTLINE, mode, player));
     }
