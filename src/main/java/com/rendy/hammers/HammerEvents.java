@@ -3,6 +3,7 @@ package com.rendy.hammers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -63,6 +64,7 @@ public class HammerEvents {
                         if (hardness * 2 >= state.getDestroySpeed(level, pos) && isBestTool(state, level, pos, item, event.getPlayer()) && state.getDestroySpeed(level, pos) >= 0f && item.getItem().getDamage(item)+i < item.getMaxDamage()) {
                             if(notCreativeMode){
                                 state.getBlock().playerDestroy(level, event.getPlayer(), pos, state, level.getBlockEntity(pos), mainHand); //set the action to the block
+                                state.getBlock().getExpDrop(state,level,RandomSource.create(),pos);
                                 i+=1; //This makes sense later
                             }
                             level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState()); //I destroy it
