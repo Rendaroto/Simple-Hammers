@@ -2,19 +2,14 @@ package com.rendy.hammers;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ToolMaterial;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 import org.jetbrains.annotations.NotNull;
 
 public class HammerItem extends PickaxeItem {
-        HammerItem(Tier pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties) {
-            super(pTier, pProperties.attributes((createAttributes(pTier, pAttackDamageModifier, pAttackSpeedModifier))));
-        }
-
-        @Override
-        public boolean isEnchantable(@NotNull ItemStack pStack) {
-            return true;
+        HammerItem(ToolMaterial pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties) {
+            super(pTier, pAttackDamageModifier, pAttackSpeedModifier, pProperties);
         }
 
         @Override

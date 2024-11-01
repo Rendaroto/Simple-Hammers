@@ -7,18 +7,10 @@
     " / "
   ],
   "key": {
-    "#": {
-      "item": "minecraft:iron_block"
-    },
-    "W": {
-      "item": "minecraft:iron_shovel"
-    },
-    "L": {
-      "item": "minecraft:iron_pickaxe"
-    },
-    "/": {
-      "item": "minecraft:stick"
-    }
+    "#": "minecraft:iron_block",
+    "W": "minecraft:iron_shovel",
+    "L": "minecraft:iron_pickaxe",
+    "/": "minecraft:stick"
   },
   "result": {
     "id": "simple_hammers:iron_hammer",

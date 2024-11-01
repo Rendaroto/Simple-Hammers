@@ -7,18 +7,10 @@
     " / "
   ],
   "key": {
-    "#": {
-      "item": "minecraft:diamond_block"
-    },
-    "W": {
-      "item": "minecraft:diamond_shovel"
-    },
-    "L": {
-      "item": "minecraft:diamond_pickaxe"
-    },
-    "/": {
-      "item": "minecraft:stick"
-    }
+    "#": "minecraft:diamond_block",
+    "W": "minecraft:diamond_shovel",
+    "L": "minecraft:diamond_pickaxe",
+    "/": "minecraft:stick"
   },
   "result": {
     "id": "simple_hammers:diamond_hammer",

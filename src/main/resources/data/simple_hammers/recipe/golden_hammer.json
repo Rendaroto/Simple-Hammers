@@ -7,18 +7,10 @@
     " / "
   ],
   "key": {
-    "#": {
-      "item": "minecraft:gold_block"
-    },
-    "W": {
-      "item": "minecraft:golden_shovel"
-    },
-    "L": {
-      "item": "minecraft:golden_pickaxe"
-    },
-    "/": {
-      "item": "minecraft:stick"
-    }
+    "#": "minecraft:gold_block",
+    "W": "minecraft:golden_shovel",
+    "L": "minecraft:golden_pickaxe",
+    "/": "minecraft:stick"
   },
   "result": {
     "id": "simple_hammers:golden_hammer",

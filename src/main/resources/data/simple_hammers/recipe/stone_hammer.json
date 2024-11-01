@@ -7,18 +7,10 @@
     " / "
   ],
   "key": {
-    "#": {
-      "tag": "c:cobblestones"
-    },
-    "W": {
-      "item": "minecraft:stone_shovel"
-    },
-    "L": {
-      "item": "minecraft:stone_pickaxe"
-    },
-    "/": {
-      "item": "minecraft:stick"
-    }
+    "#": "#minecraft:stone_tool_materials",
+    "W": "minecraft:stone_shovel",
+    "L": "minecraft:stone_pickaxe",
+    "/": "minecraft:stick"
   },
   "result": {
     "id": "simple_hammers:stone_hammer",

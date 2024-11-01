@@ -7,19 +7,11 @@
     " / "
   ],
   "key": {
-    "#": {
-      "tag": "minecraft:planks"
+    "#": "#minecraft:wooden_tool_materials",
+    "W": "minecraft:wooden_shovel",
+    "L": "minecraft:wooden_pickaxe",
+    "/": "minecraft:stick"
     },
-    "W": {
-      "item": "minecraft:wooden_shovel"
-    },
-    "L": {
-      "item": "minecraft:wooden_pickaxe"
-    },
-    "/": {
-      "item": "minecraft:stick"
-    }
-  },
   "result": {
     "id": "simple_hammers:wooden_hammer",
     "count": 1
