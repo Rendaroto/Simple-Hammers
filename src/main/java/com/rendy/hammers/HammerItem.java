@@ -12,12 +12,7 @@ public class HammerItem extends PickaxeItem {
             super(pTier, pAttackDamageModifier, pAttackSpeedModifier, pProperties);
         }
 
-        @Override
-        public boolean isRepairable(@NotNull ItemStack stack) {
-            return true;
-        }
-
-        //The Hammer is both a Pickaxe and a Shovel
+    //The Hammer is both a Pickaxe and a Shovel
         @Override
         public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
             return ItemAbilities.DEFAULT_PICKAXE_ACTIONS.contains(itemAbility) || ItemAbilities.DEFAULT_SHOVEL_ACTIONS.contains(itemAbility);

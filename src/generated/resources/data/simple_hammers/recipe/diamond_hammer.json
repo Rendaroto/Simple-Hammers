@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "minecraft:diamond_block",
+    "P": "minecraft:diamond_pickaxe",
+    "S": "minecraft:diamond_shovel",
+    "T": "minecraft:stick"
+  },
+  "pattern": [
+    "BPB",
+    " S ",
+    " T "
+  ],
+  "result": {
+    "count": 1,
+    "id": "simple_hammers:diamond_hammer"
+  }
+}

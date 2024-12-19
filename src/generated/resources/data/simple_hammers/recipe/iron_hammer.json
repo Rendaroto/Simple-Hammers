@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "minecraft:iron_block",
+    "P": "minecraft:iron_pickaxe",
+    "S": "minecraft:iron_shovel",
+    "T": "minecraft:stick"
+  },
+  "pattern": [
+    "BPB",
+    " S ",
+    " T "
+  ],
+  "result": {
+    "count": 1,
+    "id": "simple_hammers:iron_hammer"
+  }
+}

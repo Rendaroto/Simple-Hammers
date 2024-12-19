@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "#minecraft:planks",
+    "P": "minecraft:wooden_pickaxe",
+    "S": "minecraft:wooden_shovel",
+    "T": "minecraft:stick"
+  },
+  "pattern": [
+    "BPB",
+    " S ",
+    " T "
+  ],
+  "result": {
+    "count": 1,
+    "id": "simple_hammers:wooden_hammer"
+  }
+}

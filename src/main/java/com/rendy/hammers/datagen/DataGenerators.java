@@ -14,15 +14,17 @@ import java.util.concurrent.CompletableFuture;
 @EventBusSubscriber(modid = Hammers.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class DataGenerators {
     @SubscribeEvent
-    public static void gatherData(GatherDataEvent event) {
+    public static void gatherData(GatherDataEvent.Client event) {
 
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
-        BlockTagGenerator blockTagGenerator = generator.addProvider(event.includeServer(), new BlockTagGenerator(packOutput, lookupProvider, existingFileHelper));
-        generator.addProvider(event.includeServer(), new TagGenerator(packOutput, lookupProvider, blockTagGenerator.contentsGetter() , existingFileHelper));
+        BlockTagGenerator blockTagGenerator = generator.addProvider(true, new BlockTagGenerator(packOutput, lookupProvider, existingFileHelper));
+        generator.addProvider(true, new TagGenerator(packOutput, lookupProvider, blockTagGenerator.contentsGetter() , existingFileHelper));
+        generator.addProvider(true, new CraftingGenerator(packOutput,lookupProvider));
+        generator.addProvider(true,new ItemModelGenerator(packOutput,Hammers.MOD_ID, existingFileHelper));
 
     }
 }
