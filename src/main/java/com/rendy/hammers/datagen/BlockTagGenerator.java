@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class BlockTagGenerator extends BlockTagsProvider {
     public BlockTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-        super(output, lookupProvider, Hammers.MOD_ID, null);
+        super(output, lookupProvider, Hammers.MOD_ID);
     }
 
     @Override

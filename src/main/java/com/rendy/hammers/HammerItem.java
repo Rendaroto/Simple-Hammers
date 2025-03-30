@@ -1,20 +1,13 @@
 package com.rendy.hammers;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
-import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.common.ItemAbility;
-import org.jetbrains.annotations.NotNull;
 
-public class HammerItem extends PickaxeItem {
-        HammerItem(ToolMaterial pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties) {
-            super(pTier, pAttackDamageModifier, pAttackSpeedModifier, pProperties);
-        }
+import java.util.Set;
 
-    //The Hammer is both a Pickaxe and a Shovel
-        @Override
-        public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
-            return ItemAbilities.DEFAULT_PICKAXE_ACTIONS.contains(itemAbility) || ItemAbilities.DEFAULT_SHOVEL_ACTIONS.contains(itemAbility);
-        }
+public class HammerItem extends Item {
+    HammerItem(ToolMaterial pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties) {
+        super(pProperties.tool(pTier,BlockTags.MINEABLE_WITH_PICKAXE,pAttackDamageModifier,pAttackSpeedModifier,0.0f));
+    }
 }

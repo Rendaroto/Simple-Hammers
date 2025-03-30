@@ -3,7 +3,6 @@
   "addition": "#minecraft:netherite_tool_materials",
   "base": "simple_hammers:diamond_hammer",
   "result": {
-    "count": 1,
     "id": "simple_hammers:netherite_hammer"
   },
   "template": "minecraft:netherite_upgrade_smithing_template"

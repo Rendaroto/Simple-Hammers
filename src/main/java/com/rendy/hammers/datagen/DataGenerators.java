@@ -1,5 +1,6 @@
 package com.rendy.hammers.datagen;
 
+import com.rendy.hammers.HammerItem;
 import com.rendy.hammers.Hammers;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
@@ -22,7 +23,7 @@ public class DataGenerators {
         BlockTagGenerator blockTagGenerator = generator.addProvider(true, new BlockTagGenerator(packOutput, lookupProvider));
         generator.addProvider(true, new TagGenerator(packOutput, lookupProvider, blockTagGenerator.contentsGetter()));
         generator.addProvider(true, new CraftingGenerator(packOutput,lookupProvider));
-        generator.addProvider(true, new ItemNewModelProvider(packOutput));
+        generator.addProvider(true, new GenericModelProvider(packOutput, Hammers.MOD_ID));
 
     }
 }
