@@ -39,7 +39,7 @@ public class HammerEvents {
                 final ItemStack mainHand = event.getPlayer().getMainHandItem();
 
                 //I get the block
-                final Level level = event.getPlayer().getCommandSenderWorld();
+                final Level level = event.getPlayer().level();
                 final double hardness = event.getState().getDestroySpeed(level, event.getPos());
 
                 // just to get that Vanilla touch when breaking in creative
@@ -56,7 +56,12 @@ public class HammerEvents {
                         * I check if I can actually break it with my usage
                         *
                          */
-                        if (hardness * 2 >= state.getDestroySpeed(level, pos) && isBestTool(state, item) && state.getDestroySpeed(level, pos) >= 0f && item.getItem().getDamage(item)+i < item.getMaxDamage()) {
+                        if (hardness * 2 >= state.getDestroySpeed(level, pos)
+                                && isBestTool(state, item)
+                                && state.getDestroySpeed(level, pos) >= 0f
+                                && item.getItem().getDamage(item)+i < item.getMaxDamage()
+                                && !pos.equals(event.getPos())) {
+
                             if(notCreativeMode){
                                 state.getBlock().playerDestroy(level, event.getPlayer(), pos, state, level.getBlockEntity(pos), mainHand); //set the action to the block
                                 state.getBlock().getExpDrop(state,level,pos,null, event.getPlayer(), mainHand);

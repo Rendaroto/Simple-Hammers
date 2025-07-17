@@ -4,17 +4,18 @@ import com.rendy.hammers.Hammer;
 import com.rendy.hammers.Hammers;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.data.ItemTagsProvider;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class TagGenerator extends ItemTagsProvider {
 
-    public TagGenerator(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> providerCompletableFuture, CompletableFuture<TagLookup<Block>> tagLookupCompletableFuture) {
-        super(packOutput, providerCompletableFuture, tagLookupCompletableFuture, Hammers.MOD_ID);
+    public TagGenerator(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> providerCompletableFuture) {
+        super(packOutput, providerCompletableFuture, Hammers.MOD_ID);
     }
 
     @Override
