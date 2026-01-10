@@ -1,7 +1,6 @@
 package com.rendy.hammers.datagen;
 
 import com.rendy.hammers.Hammer;
-import com.rendy.hammers.HammerItem;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
