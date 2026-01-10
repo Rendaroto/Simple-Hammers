@@ -12,7 +12,7 @@ import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.client.renderer.item.BlockModelWrapper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 
 import java.util.Collections;
@@ -36,8 +36,8 @@ public class GenericModelProvider extends ModelProvider {
 
     public void itemModel(ItemModelGenerators itemModels, Item item, ModelTemplate template)
     {
-        ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
-        ResourceLocation textureLoc = ResourceLocation.fromNamespaceAndPath(itemId.getNamespace(), "item/" + itemId.getPath());
+        Identifier itemId = BuiltInRegistries.ITEM.getKey(item);
+        Identifier textureLoc = Identifier.fromNamespaceAndPath(itemId.getNamespace(), "item/" + itemId.getPath());
         TextureMapping textureMapping = new TextureMapping().put(TextureSlot.LAYER0, textureLoc);
         itemModels.itemModelOutput.accept(item, new BlockModelWrapper.Unbaked(template.create(item, textureMapping, itemModels.modelOutput), Collections.emptyList()));
     }
