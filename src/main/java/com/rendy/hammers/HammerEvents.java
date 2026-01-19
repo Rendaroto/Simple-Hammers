@@ -2,7 +2,6 @@ package com.rendy.hammers;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -13,7 +12,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -42,14 +40,14 @@ public class HammerEvents {
                 final ItemStack mainHand = event.getPlayer().getMainHandItem();
 
                 //I get the block
-                final Level level = event.getPlayer().getCommandSenderWorld();
+                final Level level = event.getPlayer().level();
                 final double hardness = event.getState().getDestroySpeed(level, event.getPos());
 
                 // just to get that Vanilla touch when breaking in creative
                 final boolean notCreativeMode = !event.getPlayer().isCreative();
 
                 if(!event.getPlayer().isShiftKeyDown()) {
-                    for (BlockPos pos : getAffectedPos(event.getPlayer())) { //I get all the block to break
+                    for (BlockPos pos : getAffectedPos(event.getPlayer(),1)) { //I get all the block to break
                         final BlockState state = level.getBlockState(pos);
                         /*
                         *
@@ -59,7 +57,11 @@ public class HammerEvents {
                         * I check if I can actually break it with my usage
                         *
                          */
-                        if (hardness * 2 >= state.getDestroySpeed(level, pos) && isBestTool(state, level, pos, item, event.getPlayer()) && state.getDestroySpeed(level, pos) >= 0f && item.getItem().getDamage(item)+i < item.getMaxDamage()) {
+                        if (hardness * 2 >= state.getDestroySpeed(level, pos)
+                                && isBestTool(state, level, pos, item, event.getPlayer())
+                                && state.getDestroySpeed(level, pos) >= 0f
+                                && item.getItem().getDamage(item)+i < item.getMaxDamage()
+                                && !pos.equals(event.getPos())) {
                             if(notCreativeMode){
                                 state.getBlock().playerDestroy(level, event.getPlayer(), pos, state, level.getBlockEntity(pos), mainHand); //set the action to the block
                                 state.getBlock().getExpDrop(state,level,pos,null, event.getPlayer(), mainHand);
@@ -85,24 +87,12 @@ public class HammerEvents {
         return stack.isCorrectToolForDrops(target);
     }
 
-    //I calculate what I'm seeing to get the blocks around, I guess I copied from google xD
-    public static BlockHitResult rayTrace(final Level level, final Player player, final ClipContext.Fluid mode) {
-        float pitch = player.getXRot();
-        float yaw = player.getYRot();
-        // Precalculate trigonometric values
-        float yawCos = Mth.cos(-yaw * 0.017453292F - (float) Math.PI);
-        float yawSin = Mth.sin(-yaw * 0.017453292F - (float) Math.PI);
-        float pitchCos = -Mth.cos(-pitch * 0.017453292F);
-        float pitchSin = Mth.sin(-pitch * 0.017453292F);
-        // Compute product values
-        float product = yawSin * pitchCos;
-        float product2 = yawCos * pitchCos;
-
-        Vec3 vec3 = player.getEyePosition(1.0F);
-        // Update coordinates of vec3 instead of creating a new Vec3 instance
-        vec3 = vec3.add(product * 4.5, pitchSin * 4.5, product2 * 4.5);
-
-        return level.clip(new ClipContext(player.getEyePosition(1.0F), vec3, ClipContext.Block.OUTLINE, mode, player));
+    //I calculate what I'm seeing to get the blocks around, I guess I copied from Google xD
+    public static BlockHitResult rayTrace(final Level level, final Player player) {
+        return level.clip(
+                new ClipContext(player.getEyePosition(1f),
+                        (player.getEyePosition(1f).add(player.getViewVector(1f).scale(6f))),
+                        ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
     }
 
     /**
@@ -111,46 +101,35 @@ public class HammerEvents {
      * @param player the player.
      * @return the list of affected positions.
      */
-    public static List<BlockPos> getAffectedPos(@NotNull final Player player)
+    public static List<BlockPos> getAffectedPos(@NotNull final Player player, int range)
     {
         final List<BlockPos> list = new ArrayList<>();
-        final BlockHitResult rayTrace = rayTrace(player.level(), player, ClipContext.Fluid.NONE);
+        final BlockHitResult rayTrace = rayTrace(player.level(), player);
 
         final BlockPos center = rayTrace.getBlockPos();
-        list.add(center);
         switch (rayTrace.getDirection()) {
             case DOWN, UP -> {
-                list.add(center.west());
-                list.add(center.east());
-                list.add(center.north());
-                list.add(center.south());
-                list.add(center.west().north());
-                list.add(center.west().south());
-                list.add(center.east().north());
-                list.add(center.east().south());
+                for (int x = -range; x <= range; x++) {
+                    for (int y = -range; y <= range; y++) {
+                        list.add(new BlockPos(center.getX() + x, center.getY(), center.getZ() + y));
+                    }
+                }
             }
             case NORTH, SOUTH -> {
-                list.add(center.above());
-                list.add(center.below());
-                list.add(center.west());
-                list.add(center.east());
-                list.add(center.west().above());
-                list.add(center.west().below());
-                list.add(center.east().above());
-                list.add(center.east().below());
+                for (int x = -range; x <= range; x++) {
+                    for (int y = -range; y <= range; y++) {
+                        list.add(new BlockPos(center.getX() + x, center.getY() + y, center.getZ()));
+                    }
+                }
             }
             case EAST, WEST -> {
-                list.add(center.above());
-                list.add(center.below());
-                list.add(center.north());
-                list.add(center.south());
-                list.add(center.north().above());
-                list.add(center.north().below());
-                list.add(center.south().above());
-                list.add(center.south().below());
+                for (int x = -range; x <= range; x++) {
+                    for (int y = -range; y <= range; y++) {
+                        list.add(new BlockPos(center.getX(), center.getY() + y, center.getZ() + x));
+                    }
+                }
             }
         }
-
         return list;
     }
 }
