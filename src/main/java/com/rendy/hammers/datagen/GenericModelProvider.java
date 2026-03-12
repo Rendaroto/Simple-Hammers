@@ -28,6 +28,7 @@ public class GenericModelProvider extends ModelProvider {
         itemModel(itemModels, Hammer.WOODEN_HAMMER.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModel(itemModels, Hammer.STONE_HAMMER.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModel(itemModels, Hammer.GOLDEN_HAMMER.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModel(itemModels, Hammer.COPPER_HAMMER.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModel(itemModels, Hammer.IRON_HAMMER.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModel(itemModels, Hammer.DIAMOND_HAMMER.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModel(itemModels, Hammer.NETHERITE_HAMMER.get(), ModelTemplates.FLAT_HANDHELD_ITEM);

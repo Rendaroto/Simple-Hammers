@@ -36,6 +36,12 @@ public class CraftingGenerator extends RecipeProvider.Runner {
                         .pattern(" T ")
                         .define('B', Tags.Items.COBBLESTONES).define('P', Items.STONE_PICKAXE).define('S', Items.STONE_SHOVEL).define('T', Items.STICK)
                         .unlockedBy("has_stone_pickaxe", has(Items.STONE_PICKAXE)).save(output);
+                shaped(RecipeCategory.TOOLS, Hammer.COPPER_HAMMER)
+                        .pattern("BPB")
+                        .pattern(" S ")
+                        .pattern(" T ")
+                        .define('B', Items.COPPER_BLOCK).define('P', Items.COPPER_PICKAXE).define('S', Items.COPPER_SHOVEL).define('T', Items.STICK)
+                        .unlockedBy("has_copper_pickaxe", has(Items.COPPER_PICKAXE)).save(output);
                 shaped(RecipeCategory.TOOLS, Hammer.IRON_HAMMER)
                         .pattern("BPB")
                         .pattern(" S ")

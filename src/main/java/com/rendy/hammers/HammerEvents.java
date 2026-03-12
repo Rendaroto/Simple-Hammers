@@ -25,6 +25,9 @@ public class HammerEvents {
     @SubscribeEvent
     public static void onBlockBreak(@NotNull final BlockEvent.BreakEvent event)
     {
+        if (event.getLevel().isClientSide())
+            return;
+
         //IDK
         if (event.getState().canOcclude())
         {
@@ -71,7 +74,6 @@ public class HammerEvents {
                         }
                     }
                     item.hurtAndBreak(i, event.getPlayer(), equipmentSlot); //remove the usage
-                    item.hurtAndBreak(-1,event.getPlayer(), equipmentSlot); //even if it's zero the vanilla shrink later should do the trick
                 }
             }
         }
