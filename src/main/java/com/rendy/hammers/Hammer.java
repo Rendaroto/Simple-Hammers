@@ -23,6 +23,10 @@ public class Hammer {
             "golden_hammer",
             properties -> new HammerItem(HammerTier.GOLD_HAMMER,1,-2f,properties),
             new Item.Properties());
+    public static final DeferredItem<HammerItem> COPPER_HAMMER = HAMMER_ITEMS.registerItem  (
+            "copper_hammer",
+            properties -> new HammerItem(HammerTier.COPPER_HAMMER,1,-2.5f,properties),
+            new Item.Properties());
     public static final DeferredItem<HammerItem> IRON_HAMMER = HAMMER_ITEMS.registerItem  (
             "iron_hammer",
             properties -> new HammerItem(HammerTier.IRON_HAMMER,1,-2.5f,properties),
