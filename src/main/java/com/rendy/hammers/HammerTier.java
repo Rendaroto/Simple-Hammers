@@ -9,6 +9,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
+import javax.tools.Tool;
 import java.util.function.Supplier;
 
 
@@ -24,9 +25,11 @@ public class HammerTier{
     public static final ToolMaterial WOODEN_HAMMER = new ToolMaterial(BlockTags.INCORRECT_FOR_WOODEN_TOOL, ToolMaterial.WOOD.durability()*hammerDurability, ToolMaterial.WOOD.speed(), ToolMaterial.WOOD.attackDamageBonus(), ToolMaterial.WOOD.enchantmentValue(), ItemTags.WOODEN_TOOL_MATERIALS);
     public static final ToolMaterial STONE_HAMMER = new ToolMaterial(BlockTags.INCORRECT_FOR_STONE_TOOL, ToolMaterial.STONE.durability()*hammerDurability, ToolMaterial.STONE.speed(), ToolMaterial.STONE.attackDamageBonus(), ToolMaterial.STONE.enchantmentValue(), ItemTags.STONE_TOOL_MATERIALS);
     public static final ToolMaterial GOLD_HAMMER = new ToolMaterial(BlockTags.INCORRECT_FOR_STONE_TOOL, ToolMaterial.GOLD.durability()*hammerDurability, ToolMaterial.GOLD.speed(), ToolMaterial.GOLD.attackDamageBonus(), ToolMaterial.IRON.enchantmentValue(), ItemTags.GOLD_TOOL_MATERIALS);
+    public static final ToolMaterial COPPER_HAMMER = new ToolMaterial(BlockTags.INCORRECT_FOR_COPPER_TOOL, ToolMaterial.COPPER.durability()*hammerDurability, ToolMaterial.COPPER.speed(), ToolMaterial.COPPER.attackDamageBonus(), ToolMaterial.COPPER.enchantmentValue(), ItemTags.COPPER_TOOL_MATERIALS);
     public static final ToolMaterial IRON_HAMMER = new ToolMaterial(BlockTags.INCORRECT_FOR_IRON_TOOL, ToolMaterial.IRON.durability()*hammerDurability, ToolMaterial.IRON.speed(), ToolMaterial.IRON.attackDamageBonus(), ToolMaterial.IRON.enchantmentValue(), ItemTags.IRON_TOOL_MATERIALS);
     public static final ToolMaterial DIAMOND_HAMMER = new ToolMaterial(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, ToolMaterial.DIAMOND.durability()*hammerDurability, ToolMaterial.DIAMOND.speed(), ToolMaterial.DIAMOND.attackDamageBonus(), ToolMaterial.DIAMOND.enchantmentValue(), ItemTags.DIAMOND_TOOL_MATERIALS);
     public static final ToolMaterial NETHERITE_HAMMER = new ToolMaterial(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, ToolMaterial.NETHERITE.durability()*hammerDurability, ToolMaterial.NETHERITE.speed(), ToolMaterial.NETHERITE.attackDamageBonus(), ToolMaterial.NETHERITE.enchantmentValue(), ItemTags.NETHERITE_TOOL_MATERIALS);
+
 
     private final TagKey<Block> incorrect;
     private final int uses;

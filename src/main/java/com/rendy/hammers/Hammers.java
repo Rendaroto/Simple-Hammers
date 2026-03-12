@@ -30,6 +30,7 @@ public class Hammers
             event.accept(Hammer.WOODEN_HAMMER);
             event.accept(Hammer.STONE_HAMMER);
             event.accept(Hammer.GOLDEN_HAMMER);
+            event.accept(Hammer.COPPER_HAMMER);
             event.accept(Hammer.IRON_HAMMER);
             event.accept(Hammer.DIAMOND_HAMMER);
             event.accept(Hammer.NETHERITE_HAMMER);

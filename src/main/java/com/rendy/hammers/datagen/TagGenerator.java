@@ -24,6 +24,7 @@ public class TagGenerator extends ItemTagsProvider {
                 .add(
                          Hammer.WOODEN_HAMMER.get()
                         ,Hammer.STONE_HAMMER.get()
+                        ,Hammer.COPPER_HAMMER.get()
                         ,Hammer.IRON_HAMMER.get()
                         ,Hammer.GOLDEN_HAMMER.get()
                         ,Hammer.DIAMOND_HAMMER.get()
@@ -33,6 +34,7 @@ public class TagGenerator extends ItemTagsProvider {
                 .add(
                         Hammer.WOODEN_HAMMER.get()
                         ,Hammer.STONE_HAMMER.get()
+                        ,Hammer.COPPER_HAMMER.get()
                         ,Hammer.IRON_HAMMER.get()
                         ,Hammer.GOLDEN_HAMMER.get()
                         ,Hammer.DIAMOND_HAMMER.get()
