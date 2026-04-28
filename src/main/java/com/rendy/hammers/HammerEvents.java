@@ -14,6 +14,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import java.util.List;
 public class HammerEvents {
 
     @SubscribeEvent
-    public static void onBlockBreak(@NotNull final BlockEvent.BreakEvent event)
+    public static void onBlockBreak(@NotNull final BreakBlockEvent event)
     {
         if (event.getLevel().isClientSide())
             return;
