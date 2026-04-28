@@ -51,16 +51,14 @@ public class HammerEvents {
                 if(!event.getPlayer().isShiftKeyDown()) {
                     for (BlockPos pos : getAffectedPos(event.getPlayer(), 1)) { //I get all the block to break
                         final BlockState state = level.getBlockState(pos);
-                        /*
-                        *
+                        /**
                         * I check that
                         * I can break the block, and it is not too hard compared to the one I actually broke
                         * I check that the block is breakable
                         * I check if I can actually break it with my usage
-                        *
-                         */
+                        **/
                         if (hardness * 2 >= state.getDestroySpeed(level, pos)
-                                && isBestTool(state, item)
+                                && item.isCorrectToolForDrops(state)
                                 && state.getDestroySpeed(level, pos) >= 0f
                                 && item.getItem().getDamage(item)+i < item.getMaxDamage()
                                 && !pos.equals(event.getPos())) {
@@ -77,15 +75,6 @@ public class HammerEvents {
                 }
             }
         }
-    }
-
-    //Also Google, but I know that I know, I don't know, but I'm sure that I know that I check if the block is right for drop
-    private static boolean isBestTool(final BlockState target,final ItemStack stack)
-    {
-        if (stack.getItem() instanceof HammerItem && (stack.isCorrectToolForDrops(target) || target.getTags().toList().contains(BlockTags.MINEABLE_WITH_SHOVEL)))
-            return true;
-
-        return stack.isCorrectToolForDrops(target);
     }
 
     //I calculate what I'm seeing to get the blocks around, I guess I copied from Google xD
